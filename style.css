@@ -12,6 +12,20 @@ input{
     margin-bottom: 10px;
     height: 20px;
 }
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+table{
+    margin: 10px;
+}
+th{
+    background-color: lavenderblush;
+    font-size: 16px;
+}
+th, td{
+    padding: 5px;
+}
 textarea{
     margin-bottom: 20px;
 }
