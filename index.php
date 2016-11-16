@@ -15,6 +15,7 @@
             $port = 3306;
             $dbname = "myTestDB";
             $tableName = "GuestBook";
+            $field = "";
             $usernameErr = $emailErr = $homepageErr = $messageErr = "";
             $username = $email = $homepage = $message = "";
 
@@ -88,7 +89,7 @@
                         } else {
                             echo "Error: " . $insertsql  . $conn->error;
                         }
-                    } else { echo "edit input information"; }
+                    }// else { echo "edit input information"; }
                 } else {               
                     $table = "CREATE TABLE $tableName (
                     id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
@@ -105,10 +106,10 @@
                         echo "Error creating table: " . $conn->error;
                     }      
 
-                    $insertsql = "INSERT INTO $tableName (username, email, homepage, text)
-                    VALUES ('$username', '$email', '$homepage', '$message')";
-
-                    if($username && $email && $message){
+                    if(!$usernameErr && !$emailErr && !$homepageErr && !$messageErr){                       
+                        $insertsql = "INSERT INTO GuestBook (username, email, homepage, text)
+                        VALUES ('$username', '$email', '$homepage', '$message')";
+                        
                         if ($conn->query($insertsql)) {
                             echo "New record created successfully";
                             $usernameErr = $emailErr = $homepageErr = $messageErr = "";
@@ -119,7 +120,8 @@
                     }
                 }
             }
-            
+       //     echo "<a href='viewguestbook.php'>View guestbook</a>";
+        
             function test_input($data) {
               $data = trim($data);
               $data = stripslashes($data);
@@ -141,7 +143,7 @@
         
         <?php
             echo "<h2>Our guests:</h2>";
-            echo "<table border='1'>"
+            echo "<table>"
                     . "<thead><tr>"
                         . "<th><a href='index.php?sort=name'> User Name </a></th>"
                         . "<th><a href='index.php?sort=email'> Email </a></th>"
@@ -181,15 +183,20 @@
             }    
             
             $sortOrder = getSortOrder();
-                
-            if ($_GET['sort'] == 'name') {
-                $sql .= " ORDER BY username"; 
-            } elseif ($_GET['sort'] == 'email') {
-                $sql .= " ORDER BY email";
-            } elseif ($_GET['sort'] == 'date') {
-                $sql .= " ORDER BY reg_date";
+            
+            if(isset($_GET['sort'])){
+                $field = $_GET['sort'];
+                if ($field == 'name') {
+                    $sql .= " ORDER BY username"; 
+                } elseif ($field == 'email') {
+                    $sql .= " ORDER BY email";
+                } elseif ($field == 'date') {
+                    $sql .= " ORDER BY reg_date";
+                };
+            } else {
+                $field = 'reg_date';
+                $sql.= " ORDER BY reg_date";
             };
-
             $sql .= " ".$sortOrder." LIMIT $start_from, $results_per_page";
             $result = $conn->query($sql); 
             if ($result->num_rows > 0) {
@@ -209,7 +216,7 @@
             $total_pages = ceil($row["total"] / $results_per_page); // calculate total pages with results
 
             for ($i=1; $i<=$total_pages; $i++) {  // print links for all pages
-                echo "<a href='index.php?page=".$i."&sort=".$_GET['sort']."'";
+                echo "<a href='index.php?page=".$i."&sort=".$field."'";
                 if ($i==$page)  echo " class='curPage'";
                 echo ">".$i."</a> "; 
             }; 
