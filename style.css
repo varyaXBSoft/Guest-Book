@@ -1,12 +1,14 @@
+h1{
+    margin-left: 30px;
+}
 h2{
-    text-align: center;
+    margin: 30px;
 }
 p{
     margin-left: 20px;
 }
 form{
     margin: 20px;
-    width: 500px;
 }
 input{
     margin-bottom: 10px;
@@ -17,17 +19,25 @@ table, th, td {
     border-collapse: collapse;
 }
 table{
-    margin: 10px;
+    margin: 30px;
 }
 th{
-    background-color: lavenderblush;
+    background-color: lightgrey;
     font-size: 16px;
+}
+.sortableHeader{
+    color: darkslategrey;
 }
 th, td{
     padding: 5px;
 }
 textarea{
     margin-bottom: 20px;
+}
+.textspan{
+    display: inline-block;
+    position: relative;
+    top: -30px;
 }
 #submitButton{
     display: block;
@@ -36,7 +46,7 @@ textarea{
     font-size: 16px;
     border-radius: 3px;
     background-color: lightgrey;
-    margin: auto;
+    margin-left: 40px;
 }
 .error{
     color: red;
@@ -54,6 +64,18 @@ th a:after{
 }
 td{
     padding: 5px;
+}
+.pager a.curPage{
+    font-weight: bold;
+    font-size: 20px;
+}
+.pager{
+    font-size: 16px;
+    color: black;
+    margin-left: 50px;
+}
+.pager a:visited{
+    color: black;
 }
 
 
