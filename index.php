@@ -120,7 +120,6 @@
                     }
                 }
             }
-       //     echo "<a href='viewguestbook.php'>View guestbook</a>";
         
             function test_input($data) {
               $data = trim($data);
@@ -137,7 +136,7 @@
             <label>User Name:</label> <input type="text" name="username" value="<?php echo $username;?>"><span class="error">* <?php echo $usernameErr;?></span><br>
             <label>E-mail:</label> <input type="text" name="email" value="<?php echo $email;?>"><span class="error">* <?php echo $emailErr;?></span><br>
             <label>Homepage:</label> <input type="text" name="homepage" value="<?php echo $homepage;?>"><span class="error"><?php echo $homepageErr;?></span><br>
-            <label style="vertical-align: top">Text:</label> <textarea name="message" rows="5" cols="40" value="<?php echo $message;?>"></textarea><span class="error">* <?php echo $messageErr;?></span><br>
+            <label style="vertical-align: top">Text:</label> <textarea name="message" rows="5" cols="40" value="<?php echo $message;?>"></textarea><span class="error textspan">* <?php echo $messageErr;?></span><br>
             <input type="submit" value="Add message" name="submit" id="submitButton">
         </form>   
         
@@ -145,9 +144,9 @@
             echo "<h2>Our guests:</h2>";
             echo "<table>"
                     . "<thead><tr>"
-                        . "<th><a href='index.php?sort=name'> User Name </a></th>"
-                        . "<th><a href='index.php?sort=email'> Email </a></th>"
-                        . "<th><a href='index.php?sort=date'> Post Date </a></th>"
+                        . "<th><a href='index.php?sort=name' class='sortableHeader'> User Name </a></th>"
+                        . "<th><a href='index.php?sort=email' class='sortableHeader'> Email </a></th>"
+                        . "<th><a href='index.php?sort=reg_date' class='sortableHeader'> Post Date </a></th>"
                         . "<th> Homepage </th>"
                         . "<th> Text </th>"
                     . "</tr></thead>"
@@ -168,7 +167,7 @@
             function getSortOrder() {
                 $col = $_GET['sort'];
                 $sortOrder = "";
-                if(!isset($_GET["page"])){
+                if(!isset($_GET["page"]) && ($_SERVER["REQUEST_METHOD"]!="POST")){
                     if(isset($_SESSION['sort'.$col]) && $_SESSION['sort'.$col] === 'ASC'){
                         $_SESSION['sort'.$col] = 'DESC';
                         $sortOrder .= "DESC";
@@ -190,7 +189,7 @@
                     $sql .= " ORDER BY username"; 
                 } elseif ($field == 'email') {
                     $sql .= " ORDER BY email";
-                } elseif ($field == 'date') {
+                } elseif ($field == 'reg_date') {
                     $sql .= " ORDER BY reg_date";
                 };
             } else {
@@ -214,13 +213,13 @@
             $result = $conn->query($sql);
             $row = $result->fetch_assoc();
             $total_pages = ceil($row["total"] / $results_per_page); // calculate total pages with results
-
+            echo "<div class='pager'>";
             for ($i=1; $i<=$total_pages; $i++) {  // print links for all pages
                 echo "<a href='index.php?page=".$i."&sort=".$field."'";
                 if ($i==$page)  echo " class='curPage'";
                 echo ">".$i."</a> "; 
             }; 
-
+            echo "</div>";
             $conn->close();
         ?>
     </body>
